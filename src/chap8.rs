@@ -1,11 +1,11 @@
 #![allow(unused)]
 
 pub(crate) fn raw_pointers() {
-        let a = 42;
-        //let m = &a as *const i32 as usize;
-        let m = &a as *const i32;
-        println!("a is here: {:?}", m);
-        println!("&a: {:p}", &a);
+    let a = 42;
+    //let m = &a as *const i32 as usize;
+    let m = &a as *const i32;
+    println!("a is here: {:?}", m);
+    println!("&a: {:p}", &a);
 }
 
 pub(crate) fn the_asterisk_operator() {
@@ -18,7 +18,7 @@ pub(crate) fn the_asterisk_operator() {
 
 pub(crate) fn the_dot_operator() {
     struct Foo {
-        value: i32
+        value: i32,
     }
 
     let f = Foo { value: 42111 };
@@ -31,7 +31,7 @@ pub(crate) fn the_dot_operator() {
 pub(crate) fn smart_pointers() {
     use std::ops::Deref;
     struct TT<T> {
-        value: T
+        value: T,
     }
 
     impl<T> Deref for TT<T> {
@@ -42,18 +42,13 @@ pub(crate) fn smart_pointers() {
         }
     }
 
-    let foo = TT {
-        value: "sec msg"
-    };
+    let foo = TT { value: "sec msg" };
 
     println!("{}", foo.len());
 
-    let bar = TT {
-        value: 1234
-    };
+    let bar = TT { value: 1234 };
 
     println!("{}", bar.value);
-
 }
 
 pub(crate) fn smart_unsafe_code() {
@@ -66,9 +61,7 @@ pub(crate) fn smart_unsafe_code() {
     let pointer_b = pointer_a as *const f32;
     println!("pointer_b: {:?}", pointer_b);
 
-    let b = unsafe {
-        *pointer_b
-    };
+    let b = unsafe { *pointer_b };
     println!("b: {}", b);
 }
 
@@ -84,7 +77,10 @@ pub(crate) fn heep_allocated_memory() {
     let heap_pie_box = Box::new(Pie);
     let heap_pie = Pie;
 
-    println!("&heap_pie: {:p}, &heap_pie_box: {:p}", &heap_pie, &heap_pie_box);
+    println!(
+        "&heap_pie: {:p}, &heap_pie_box: {:p}",
+        &heap_pie, &heap_pie_box
+    );
 
     heap_pie_box.eat();
     heap_pie.eat();
@@ -133,18 +129,30 @@ pub(crate) fn reference_counting() {
     let heap_pie = Rc::new(Pie);
     let heap_pie2 = heap_pie.clone();
     let heap_pie3 = heap_pie2.clone();
-       
+
     println!("1: {:p} -> {:p} -> {:?}", &heap_pie, &*heap_pie, *heap_pie);
-    println!("2: {:p} -> {:p} -> {:?}", &heap_pie2, &*heap_pie2, *heap_pie2);
-    println!("3: {:p} -> {:p} -> {:?}", &heap_pie3, &*heap_pie3, *heap_pie3);
+    println!(
+        "2: {:p} -> {:p} -> {:?}",
+        &heap_pie2, &*heap_pie2, *heap_pie2
+    );
+    println!(
+        "3: {:p} -> {:p} -> {:?}",
+        &heap_pie3, &*heap_pie3, *heap_pie3
+    );
 
     heap_pie3.eat();
     heap_pie2.eat();
     heap_pie.eat();
 
     println!("1: {:p} -> {:p} -> {:?}", &heap_pie, &*heap_pie, *heap_pie);
-    println!("2: {:p} -> {:p} -> {:?}", &heap_pie2, &*heap_pie2, *heap_pie2);
-    println!("3: {:p} -> {:p} -> {:?}", &heap_pie3, &*heap_pie3, *heap_pie3);
+    println!(
+        "2: {:p} -> {:p} -> {:?}",
+        &heap_pie2, &*heap_pie2, *heap_pie2
+    );
+    println!(
+        "3: {:p} -> {:p} -> {:?}",
+        &heap_pie3, &*heap_pie3, *heap_pie3
+    );
 }
 
 pub(crate) fn sharing_access() {
@@ -163,20 +171,40 @@ pub(crate) fn sharing_access() {
         }
     }
 
-    let pie_cell = RefCell::new(Pie{slices:8});
-    println!("{:p} -> {:p} -> {:?}, {:?}", &pie_cell, &*pie_cell.borrow(), *pie_cell.borrow(), pie_cell);
-
+    let pie_cell = RefCell::new(Pie { slices: 8 });
+    println!(
+        "{:p} -> {:p} -> {:?}, {:?}",
+        &pie_cell,
+        &*pie_cell.borrow(),
+        *pie_cell.borrow(),
+        pie_cell
+    );
 
     {
         let mut mut_ref_pie = pie_cell.borrow_mut();
-        println!("{:p} -> {:p} -> {:?}", &mut_ref_pie, &*mut_ref_pie, mut_ref_pie);
+        println!(
+            "{:p} -> {:p} -> {:?}",
+            &mut_ref_pie, &*mut_ref_pie, mut_ref_pie
+        );
         mut_ref_pie.eat();
-        println!("{:p} -> {:p} -> {:?}", &mut_ref_pie, &*mut_ref_pie, mut_ref_pie);
+        println!(
+            "{:p} -> {:p} -> {:?}",
+            &mut_ref_pie, &*mut_ref_pie, mut_ref_pie
+        );
         mut_ref_pie.eat();
-        println!("{:p} -> {:p} -> {:?}", &mut_ref_pie, &*mut_ref_pie, mut_ref_pie);
+        println!(
+            "{:p} -> {:p} -> {:?}",
+            &mut_ref_pie, &*mut_ref_pie, mut_ref_pie
+        );
     }
 
-    println!("{:p} -> {:p} -> {:?}, {:?}", &pie_cell, &*pie_cell.borrow(), *pie_cell.borrow(), pie_cell);
+    println!(
+        "{:p} -> {:p} -> {:?}, {:?}",
+        &pie_cell,
+        &*pie_cell.borrow(),
+        *pie_cell.borrow(),
+        pie_cell
+    );
 
     let ref_pie = pie_cell.borrow();
     println!("{:p} -> {:p} -> {:?}", &ref_pie, &*ref_pie, ref_pie);
@@ -190,7 +218,7 @@ pub(crate) fn sharing_access() {
     //  2. For `mut_ref_pie` and `ref_pie`, you're seeing the Debug implementation for RefMut
     //     and Ref respectively, which dereference to show the contained value directly
     //
-    // In other words, `RefCell` shows its container structure, while `Ref` and `RefMut` act 
+    // In other words, `RefCell` shows its container structure, while `Ref` and `RefMut` act
     // more like transparent references to the inner value.
     //
     // Example output:
@@ -200,7 +228,7 @@ pub(crate) fn sharing_access() {
     // 0x7ffcb60bf180 -> 0x7ffcb60bf098 -> Pie { slices: 6 }
     // 0x7ffcb60bf090 -> 0x7ffcb60bf098 -> Pie { slices: 6 }, RefCell { value: Pie { slices: 6 } }
     // 0x7ffcb60bf450 -> 0x7ffcb60bf098 -> Pie { slices: 6 }
-    // 
+    //
     // Stack:                                  Heap:
     //  0x7ffcb60bf090  +----------------+      0x7ffcb60bf098  +-------------+
     //  (pie_cell)      | RefCell struct |----->|  Pie struct   |
@@ -209,11 +237,52 @@ pub(crate) fn sharing_access() {
     //                                                 ^
     //    0x7ffcb60bf180  +----------------+           |
     //    (mut_ref_pie)   | RefMut struct  |------------
-    //                    +----------------+           
+    //                    +----------------+
     //                                                 ^
     //    0x7ffcb60bf450  +----------------+           |
     //    (ref_pie)       | Ref struct     |------------
     //                    +----------------+
     //
+}
+
+pub(crate) fn sharing_across_threads() {
+    use std::sync::Mutex;
+    
+    struct Pie;
+    impl Pie {
+        fn eat(&self) {
+            println!("sharing_across_threads");
+        }
+    }
+
+    // Create a Mutex that provides thread-safe access to Pie
+    let mutex_pie = Mutex::new(Pie);
+
+    // lock() returns MutexGuard, which is immediately used and dropped
+    mutex_pie.lock().unwrap().eat();
+
+    {
+        // MutexGuard is stored, keeping the lock until the block ends
+        let guard = mutex_pie.lock().unwrap();
+        guard.eat();
+    } // guard is dropped here, releasing the lock
+
+    // These two calls each:
+    // 1. Create a new MutexGuard (acquire lock)
+    // 2. Call eat()
+    // 3. Drop MutexGuard (release lock)
+    mutex_pie.lock().unwrap().eat();
+    mutex_pie.lock().unwrap().eat();
+
+/*
+Key concepts:
+- Mutex<T>: Container providing mutual exclusion, owns the data of type T
+- MutexGuard<T>: Temporary access token that:
+  - Is returned by lock()
+  - Provides access to &T or &mut T
+  - Automatically releases lock when dropped
+  - Ensures only one thread can access data at a time
+*/
+
 }
 

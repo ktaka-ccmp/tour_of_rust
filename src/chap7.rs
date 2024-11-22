@@ -318,7 +318,7 @@ pub(crate) fn box_() {
         name: String::from("Ferris"),
         noise: String::from("blub"),
     };
-    let sarah  = SeaCreature {
+    let sarah = SeaCreature {
         name: String::from("Sarah"),
         noise: String::from("swish"),
     };
@@ -328,27 +328,6 @@ pub(crate) fn box_() {
     };
 
     for a in ocean.animals.iter() {
-       a.make_noise();
+        a.make_noise();
     }
 }
-
- 
-
-
-
-
- 
-
-
-
-
- 
-
-
-
-
- 
-
-
-
-

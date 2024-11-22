@@ -72,9 +72,3 @@ pub(crate) fn converting_strings() -> Result<(), std::num::ParseIntError> {
     println!("{} {}", a, b);
     Ok(())
 }
-
-
-
-
-
-

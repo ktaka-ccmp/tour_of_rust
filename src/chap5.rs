@@ -32,7 +32,6 @@ pub(crate) fn dropping_is_hierarchical() {
 
     let foo = Foo { bar: Bar { x: 43 } };
     println!("{}", foo.bar.x);
-
 }
 
 pub(crate) fn moving_ownership() {
@@ -120,10 +119,9 @@ pub(crate) fn passing_around_borrowed_data() {
     println!("foo.x: {}", foo.x);
     do_something(&mut foo);
     println!("foo.x: {}", foo.x);
-    
+
     do_something(&mut foo);
     println!("foo.x: {}", foo.x);
-
 }
 
 pub(crate) fn references_of_references() {
@@ -132,7 +130,7 @@ pub(crate) fn references_of_references() {
     }
 
     fn do_something(a: &Foo) -> &i32 {
-            &a.x
+        &a.x
     }
 
     let mut foo = Foo { x: 46 };
@@ -142,7 +140,6 @@ pub(crate) fn references_of_references() {
 
     let y = do_something(&foo);
     println!("y: {}", y);
-
 }
 
 pub(crate) fn explicit_lifetimes() {
@@ -151,11 +148,11 @@ pub(crate) fn explicit_lifetimes() {
     }
 
     fn do_something0(foo: &Foo) -> &i32 {
-            &foo.x
+        &foo.x
     }
 
     fn do_something<'a>(foo: &'a Foo) -> &'a i32 {
-            &foo.x
+        &foo.x
     }
 
     let mut foo = Foo { x: 42 };
@@ -166,7 +163,6 @@ pub(crate) fn explicit_lifetimes() {
     let y = do_something0(&foo);
     println!("y: {}", y);
 }
-
 
 pub(crate) fn multiple_lifetimes() {
     struct Foo {
@@ -210,23 +206,18 @@ pub(crate) fn static_lifetimes() {
 
 pub(crate) fn lifetime_in_data_types() {
     struct Foo<'a> {
-        i: &'a i32
+        i: &'a i32,
     }
 
     struct Bar<'a> {
-        i: &'a i32
+        i: &'a i32,
     }
 
     let x = 42;
-    let foo = Foo {
-        i: &x
-    };
+    let foo = Foo { i: &x };
 
-    let bar = Bar {
-        i: &x
-    };
+    let bar = Bar { i: &x };
 
     println!("foo.i: {}", foo.i);
     println!("bar.i: {}", bar.i);
 }
-

@@ -8,7 +8,7 @@ mod chap7;
 mod chap8;
 
 fn main() {
-//fn main() -> Result<(), Box<dyn std::error::Error>> {
+    //fn main() -> Result<(), Box<dyn std::error::Error>> {
     //chap1_3::hello_world();
     //chap1_3::variables();
     //chap1_3::changing_variables();
@@ -78,5 +78,5 @@ fn main() {
     //chap8::failable_main_revisited() //<- No trailing semicolon
     chap8::reference_counting();
     chap8::sharing_access();
+    chap8::sharing_across_threads();
 }
-
