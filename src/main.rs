@@ -8,6 +8,7 @@ mod chap7;
 mod chap8;
 
 fn main() {
+//fn main() -> Result<(), Box<dyn std::error::Error>> {
     //chap1_3::hello_world();
     //chap1_3::variables();
     //chap1_3::changing_variables();
@@ -69,8 +70,13 @@ fn main() {
     //chap7::generic_function_shorthand();
     //chap7::box_();
     chap8::raw_pointers();
-    chap8::the_asterisk_operator();
-    chap8::the_dot_operator();
-    chap8::smart_pointers();
+    //chap8::the_asterisk_operator();
+    //chap8::the_dot_operator();
+    //chap8::smart_pointers();
+    //chap8::smart_unsafe_code();
+    chap8::heep_allocated_memory();
+    //chap8::failable_main_revisited() //<- No trailing semicolon
+    chap8::reference_counting();
+    chap8::sharing_access();
 }
 
