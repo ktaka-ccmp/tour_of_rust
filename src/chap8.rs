@@ -286,3 +286,96 @@ Key concepts:
 
 }
 
+pub(crate) fn combining_smart_pointers() {
+    use std::cell::RefCell;
+    use std::rc::Rc;
+
+    #[derive(Debug)]
+    struct Pie {
+        slices: u8,
+    }
+
+    impl Pie {
+        fn eat_slice(&mut self, name: &str) {
+            println!("{} took a slice", name);
+            self.slices -= 1;
+        }
+    }
+
+    struct SeaCreature {
+        name: String,
+        pie: Rc<RefCell<Pie>>,
+    }
+
+    impl SeaCreature {
+        fn eat(&self){
+            let mut p = self.pie.borrow_mut();  // Gets exclusive access to Pie
+            p.eat_slice(&self.name);            //
+        }                                       // RefMut dropped, releases access
+    }
+
+    let pie = Rc::new(RefCell::new(Pie {slices: 8})); // Rc count = 1
+    println!("{:p}, {:?}", &pie, pie);
+    println!("{:p}, {:?}", &*pie.borrow(), *pie.borrow());
+
+    let ferris = SeaCreature {
+        name: String::from("ferris"),
+        pie: pie.clone(), // Rc count = 2
+    };
+
+    let sarah = SeaCreature {
+        name: String::from("sarah"),
+        pie: pie.clone(), // Rc count = 3
+    };
+
+    ferris.eat();
+    println!("{:p}, {:?}", &pie, pie);
+    println!("{:p}, {:?}", &pie.borrow(), *pie.borrow());
+    println!("{:p}, {:?}", &*pie.borrow(), *pie.borrow());
+    println!("{:p}, {:?}", &ferris.pie.borrow(), ferris.pie.borrow());
+    println!("{:p}, {:?}", &*ferris.pie.borrow(), ferris.pie.borrow());
+    sarah.eat();
+
+    let p = pie.borrow();
+    println!("{:?}, {}", p, p.slices);
+
+/*
+ * https://claude.ai/chat/667c3d7f-c3fd-4d8b-96a5-7331e148070e
+ *
+Let me create a more detailed diagram based on actual memory addresses and the code flow:
+
+```
+Stack:                      Heap:                            Data:
+
+pie  +-------------+       +---------------+    +-----------------+
+     | Rc pointer  |------>| Rc struct     |    | RefCell         |
+     | 0xAAAA      |       | count: 3      |--->| +-------------+ |
+     +-------------+       | data ptr      |    | | Pie         | |
+                           +---------------+    | | slices: 8   | |
+                                                | +-------------+ |
+                                                +-----------------+
+ferris  +-----------------+                          ^
+        | SeaCreature     |                          |
+        | name: "ferris"  |                          |
+        | pie: Rc pointer |--------------------------+
+        +-----------------+                          |
+                                                     |
+sarah   +-----------------+                          |
+        | SeaCreature     |                          |
+        | name: "sarah"   |                          |
+        | pie: Rc pointer |--------------------------+
+        +-----------------+
+
+When ferris.eat() or sarah.eat() is called:
+1. borrow_mut() creates temporary RefMut access to Pie
+2. slices is modified
+3. RefMut is dropped, releasing access
+
+Operations:
+- pie.clone() -> creates new Rc pointer to same data
+- pie.borrow() -> gets Ref to Pie data
+- pie.borrow_mut() -> gets RefMut to Pie data
+```
+*/
+}
+
